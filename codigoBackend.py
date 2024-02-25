@@ -61,7 +61,7 @@ def generate_object_name(): # Logica para la generacion de nombres de objetos us
 
 # Logica llamada API Palo Alto
 def execute_palo_alto_command(action, xpath, element):
-    url = f'https://10.250.1.6/api/?type=config&action={action}&xpath={xpath}&element={element}&key={api_key}'
+    url = f'https://(direccion_IP)/api/?type=config&action={action}&xpath={xpath}&element={element}&key={api_key}'
     response = requests.get(url, verify=False)  # Deshabilitamos la verificación del certificado SSL
 
     if response.status_code != 200:
@@ -79,9 +79,9 @@ def extract_date_from_object_name(obj_name): # Funcion para extraer la fecha del
 
 # Logica llamada API EDR Kaspersky
 def add_objects_to_kaspersky(objects, description):
-    kaspersky_url = "https://10.1.10.163:443/kata/response_api/v1/00505693b392/settings?sensor_id=all&settings_type=prevention"
-    kaspersky_cert_path = "/home/administrator/CertKata/server-cert.pem"
-    kaspersky_key_path = "/home/administrator/CertKata/server-key.pem"
+    kaspersky_url = "https://(direccion_IP):443/kata/response_api/v1/00505693b392/settings?sensor_id=all&settings_type=prevention"
+    kaspersky_cert_path = "(Ruta de cert.pem)"
+    kaspersky_key_path = "(Ruta de key.pem)"
 
     # Recoger todas las prevention rules actuales
     response = requests.get(kaspersky_url, cert=(kaspersky_cert_path, kaspersky_key_path), verify=False)
@@ -112,7 +112,7 @@ def add_objects_to_kaspersky(objects, description):
 
 def get_existing_prevention_rules():
     # Llamada a la API para obtener las prevention rules existentes
-    api_url = "https://10.1.10.163:443/kata/response_api/v1/00505693b392/settings?sensor_id=all&settings_type=prevention"
+    api_url = "https://(direccion_IP):443/kata/response_api/v1/00505693b392/settings?sensor_id=all&settings_type=prevention"
     response = requests.get(api_url, verify=False, cert=('/home/administrator/CertKata/server-cert.pem', '/home/administrator/CertKata/server-key.pem'))
     
     # Parsear la respuesta JSON
@@ -193,7 +193,7 @@ def add_objects():
 @app.route('/apply_changes', methods=['POST'])
 def apply_changes():
     # Aplicar cambios en Palo Alto
-    command = f'curl -k --location "https://10.250.1.6//api/?type=commit&action=partial&cmd=%3Ccommit%3E%3Cpartial%3E%3Cadmin%3E%3Cmember%3Etest_api%3C%2Fmember%3E%3C%2Fadmin%3E%3C%2Fpartial%3E%3C%2Fcommit%3E&key={api_key}"'
+    command = f'curl -k --location "https://(direccion_IP)//api/?type=commit&action=partial&cmd=%3Ccommit%3E%3Cpartial%3E%3Cadmin%3E%3Cmember%3Etest_api%3C%2Fmember%3E%3C%2Fadmin%3E%3C%2Fpartial%3E%3C%2Fcommit%3E&key={api_key}"'
     subprocess.run(command, shell=True)
 
     return redirect(url_for('index'))
@@ -320,4 +320,4 @@ if __name__ == '__main__':
     key_file = 'key.pem'
 
     # Ejecutar la aplicación Flask con soporte HTTPS
-    app.run(ssl_context=(cert_file, key_file), host='10.1.1.130', port=5000, debug=True)
+    app.run(ssl_context=(cert_file, key_file), host='(direccion_IP)', port=5000, debug=True)
