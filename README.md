@@ -1,5 +1,5 @@
 # IoC-Ingest
-Herramienta de ingesta de IoCs de forma centralizada
+Herramienta de ingesta de IoCs de forma centralizada, realizada en Python con Flask
 
 La presente herramienta integrara en una unica pantalla varios sistemas de seguridad para añadir IoCs, en este caso el EDR de Kaspersky y un firewall de Palo Alto
 
